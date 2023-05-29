@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { PasswordValidator } from "./PasswordValidator.js"
 
 describe("validatePassword", () => {
-  const passwordValidator = PasswordValidator.create()
+  const passwordValidator = PasswordValidator.createValidation1()
 
   it("returns true if the password meets all the requirements", () => {
     const password = "Aa1_xxxxx"
@@ -51,6 +51,22 @@ describe("validatePassword", () => {
       const result: boolean = passwordValidator.validate(password)
 
       expect(result).toBe(false)
+    })
+  })
+
+  describe("validation 2", () => {
+    it.each([
+      ["Aa1_xxx", true],
+      ["Aa1_xx", false],
+      ["aa1_xxx", false],
+      ["AA1_XXX", false],
+      ["Aaa_xxx", false],
+    ])(`password "%s" is %s`, (password, expected) => {
+      const passwordValidator = PasswordValidator.createValidation2()
+
+      const result: boolean = passwordValidator.validate(password)
+
+      expect(result).toBe(expected)
     })
   })
 })
