@@ -6,23 +6,35 @@ function validatePassword(password: string): boolean {
     return false
   }
 
+  if (password.toLowerCase() === password) {
+    return false
+  }
+
   return true
 }
 
 describe("validatePassword", () => {
   it("returns true if the password meets all the requirements", () => {
-    const validPassword = "Aa1_xxxxx"
+    const password = "Aa1_xxxxx"
 
-    const result: boolean = validatePassword(validPassword)
+    const result: boolean = validatePassword(password)
 
     expect(result).toBe(true)
   })
 
   describe("password is rejected", () => {
     it("if has less than 8 characters", () => {
-      const validPassword = "Aa1_xxxx"
+      const password = "Aa1_xxxx"
 
-      const result: boolean = validatePassword(validPassword)
+      const result: boolean = validatePassword(password)
+
+      expect(result).toBe(false)
+    })
+
+    it("if has less than 8 characters", () => {
+      const password = "aa1_xxxxx"
+
+      const result: boolean = validatePassword(password)
 
       expect(result).toBe(false)
     })
