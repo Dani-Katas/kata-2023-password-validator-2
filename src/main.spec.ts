@@ -10,6 +10,10 @@ function validatePassword(password: string): boolean {
     return false
   }
 
+  if (password.toUpperCase() === password) {
+    return false
+  }
+
   return true
 }
 
@@ -31,8 +35,16 @@ describe("validatePassword", () => {
       expect(result).toBe(false)
     })
 
-    it("if has less than 8 characters", () => {
+    it("if not has a capital letter", () => {
       const password = "aa1_xxxxx"
+
+      const result: boolean = validatePassword(password)
+
+      expect(result).toBe(false)
+    })
+
+    it("if not has a lowercase letter", () => {
+      const password = "AA1_XXXXX"
 
       const result: boolean = validatePassword(password)
 
