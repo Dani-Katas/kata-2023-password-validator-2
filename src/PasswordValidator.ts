@@ -1,45 +1,24 @@
+import { Validator } from "./Validator.js"
+import { LengthValidator } from "./validators/LengthValidator.js"
+import { CapitalLetterValidator } from "./validators/CapitalLetterValidator.js"
+import { LowercaseLetterValidator } from "./validators/LowercaseLetterValidator.js"
+import { NumberValidator } from "./validators/NumberValidator.js"
+import { UnderscoreValidator } from "./validators/UnderscoreValidator.js"
+
 export class PasswordValidator {
+  public static create(): PasswordValidator {
+    return new PasswordValidator([
+      new LengthValidator(),
+      new CapitalLetterValidator(),
+      new LowercaseLetterValidator(),
+      new NumberValidator(),
+      new UnderscoreValidator(),
+    ])
+  }
+
+  constructor(private validators: Validator[] = []) {}
+
   validate(password: string): boolean {
-    if (this.doesNotHaveEnoughLength(password)) {
-      return false
-    }
-
-    if (this.doesNotHaveCapitalLetter(password)) {
-      return false
-    }
-
-    if (this.doesNotHaveLowercaseLetter(password)) {
-      return false
-    }
-
-    if (this.doesNotHaveNumber(password)) {
-      return false
-    }
-
-    if (this.doesNotHaveUnderscore(password)) {
-      return false
-    }
-
-    return true
-  }
-
-  private doesNotHaveEnoughLength(password: string) {
-    return password.length <= 8
-  }
-
-  private doesNotHaveLowercaseLetter(password: string) {
-    return password.toUpperCase() === password
-  }
-
-  private doesNotHaveCapitalLetter(password: string) {
-    return password.toLowerCase() === password
-  }
-
-  private doesNotHaveNumber(password: string) {
-    return password.match(/\d/) === null
-  }
-
-  private doesNotHaveUnderscore(password: string) {
-    return !password.includes("_")
+    return this.validators.every((validator) => validator.validate(password))
   }
 }

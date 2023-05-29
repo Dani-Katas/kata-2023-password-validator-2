@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { PasswordValidator } from "./PasswordValidator.js"
 
 describe("validatePassword", () => {
-  const passwordValidator = new PasswordValidator()
+  const passwordValidator = PasswordValidator.create()
 
   it("returns true if the password meets all the requirements", () => {
     const password = "Aa1_xxxxx"
