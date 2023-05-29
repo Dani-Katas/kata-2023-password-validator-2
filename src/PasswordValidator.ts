@@ -25,6 +25,15 @@ export class PasswordValidator {
     ])
   }
 
+  static createValidation3() {
+    return new PasswordValidator([
+      new LengthValidator(16),
+      new CapitalLetterValidator(),
+      new LowercaseLetterValidator(),
+      new NumberValidator(),
+    ])
+  }
+
   constructor(private validators: Validator[] = []) {}
 
   validate(password: string): boolean {

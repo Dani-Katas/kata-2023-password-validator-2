@@ -69,4 +69,20 @@ describe("validatePassword", () => {
       expect(result).toBe(expected)
     })
   })
+
+  describe("validation 3", () => {
+    it.each([
+      ["Aa1_xxxxxxxxxxxxx", true],
+      ["Aa1_xxxxxxxxxxxx", false],
+      ["aa1_xxxxxxxxxxxxx", false],
+      ["AA1_XXXXXXXXXXXXX", false],
+      ["Aaa_xxxxxxxxxxxxx", false],
+    ])(`password "%s" is %s`, (password, expected) => {
+      const passwordValidator = PasswordValidator.createValidation3()
+
+      const result = passwordValidator.validate(password)
+
+      expect(result).toBe(expected)
+    })
+  })
 })
