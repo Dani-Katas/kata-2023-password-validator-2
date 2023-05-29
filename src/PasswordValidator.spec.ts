@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest"
 import { PasswordValidator } from "./PasswordValidator.js"
 import { LengthValidationError } from "./errors/LengthValidationError.js"
 import { CapitalLetterError } from "./errors/CapitalLetterError.js"
+import { LowercaseLetterError } from "./errors/LowercaseLetterError.js"
+import { NumberError } from "./errors/NumberError.js"
+import { UnderscoreError } from "./errors/UnderscoreError.js"
 
 describe("validatePassword", () => {
   const passwordValidator = PasswordValidator.createValidation1()
@@ -34,25 +37,25 @@ describe("validatePassword", () => {
     it("if not has a lowercase letter", () => {
       const password = "AA1_XXXXX"
 
-      const result = passwordValidator.validate(password)
+      const result = passwordValidator.validateWithErrors(password)
 
-      expect(result).toBe(false)
+      expect(result[0]).toBeInstanceOf(LowercaseLetterError)
     })
 
     it("if not has a number", () => {
       const password = "Aaa_xxxxx"
 
-      const result = passwordValidator.validate(password)
+      const result = passwordValidator.validateWithErrors(password)
 
-      expect(result).toBe(false)
+      expect(result[0]).toBeInstanceOf(NumberError)
     })
 
     it("if not has a underscore", () => {
       const password = "Aa1xxxxxx"
 
-      const result = passwordValidator.validate(password)
+      const result = passwordValidator.validateWithErrors(password)
 
-      expect(result).toBe(false)
+      expect(result[0]).toBeInstanceOf(UnderscoreError)
     })
   })
 
