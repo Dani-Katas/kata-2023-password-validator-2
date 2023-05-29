@@ -6,7 +6,7 @@ import { NumberValidator } from "./validators/NumberValidator.js"
 import { UnderscoreValidator } from "./validators/UnderscoreValidator.js"
 
 export class PasswordValidator {
-  public static createValidation1(): PasswordValidator {
+  static createValidation1(): PasswordValidator {
     return new PasswordValidator([
       new LengthValidator(),
       new CapitalLetterValidator(),
