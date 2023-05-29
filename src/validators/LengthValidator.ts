@@ -5,7 +5,7 @@ import { LengthValidationError } from "../errors/LengthValidationError.js"
 export class LengthValidator implements Validator {
   constructor(private readonly minLength: number) {}
 
-  validate(password: string, tracker?: ErrorTracker): boolean {
+  validate(password: string, tracker: ErrorTracker): boolean {
     let isValid = password.length > this.minLength
 
     if (!isValid && tracker) {

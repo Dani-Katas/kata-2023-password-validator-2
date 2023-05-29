@@ -3,7 +3,7 @@ import { ErrorTracker } from "../ErrorTracker.js"
 import { LowercaseLetterError } from "../errors/LowercaseLetterError.js"
 
 export class LowercaseLetterValidator implements Validator {
-  validate(password: string, tracker?: ErrorTracker): boolean {
+  validate(password: string, tracker: ErrorTracker): boolean {
     let b = password.toUpperCase() !== password
 
     if (!b && tracker) {
