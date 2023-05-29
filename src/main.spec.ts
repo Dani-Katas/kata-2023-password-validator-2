@@ -44,5 +44,13 @@ describe("validatePassword", () => {
 
       expect(result).toBe(false)
     })
+
+    it("if not has a underscore", () => {
+      const password = "Aa1xxxxxx"
+
+      const result: boolean = passwordValidator.validate(password)
+
+      expect(result).toBe(false)
+    })
   })
 })

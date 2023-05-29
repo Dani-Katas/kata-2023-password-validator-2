@@ -16,6 +16,10 @@ export class PasswordValidator {
       return false
     }
 
+    if (this.doesNotHaveUnderscore(password)) {
+      return false
+    }
+
     return true
   }
 
@@ -33,5 +37,9 @@ export class PasswordValidator {
 
   private doesNotHaveNumber(password: string) {
     return password.match(/\d/) === null
+  }
+
+  private doesNotHaveUnderscore(password: string) {
+    return !password.includes("_")
   }
 }
