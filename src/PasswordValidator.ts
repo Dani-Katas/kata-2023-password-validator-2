@@ -8,7 +8,7 @@ import { UnderscoreValidator } from "./validators/UnderscoreValidator.js"
 export class PasswordValidator {
   static createValidation1(): PasswordValidator {
     return new PasswordValidator([
-      new LengthValidator(),
+      new LengthValidator(8),
       new CapitalLetterValidator(),
       new LowercaseLetterValidator(),
       new NumberValidator(),
