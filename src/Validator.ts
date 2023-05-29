@@ -1,3 +1,5 @@
+import { ErrorTracker } from "./ErrorTracker.js"
+
 export interface Validator {
-  validate(password: string): boolean
+  validate(password: string, tracker?: ErrorTracker): boolean
 }

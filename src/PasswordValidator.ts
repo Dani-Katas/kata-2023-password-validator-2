@@ -4,6 +4,8 @@ import { CapitalLetterValidator } from "./validators/CapitalLetterValidator.js"
 import { LowercaseLetterValidator } from "./validators/LowercaseLetterValidator.js"
 import { NumberValidator } from "./validators/NumberValidator.js"
 import { UnderscoreValidator } from "./validators/UnderscoreValidator.js"
+import { ValidationError } from "./ValidationError.js"
+import { ErrorTracker } from "./ErrorTracker.js"
 
 export class PasswordValidator {
   static createValidation1(): PasswordValidator {
@@ -36,7 +38,15 @@ export class PasswordValidator {
 
   constructor(private validators: Validator[] = []) {}
 
-  validate(password: string): boolean {
-    return this.validators.every((validator) => validator.validate(password))
+  validate(password: string, tracker?: ErrorTracker): boolean {
+    return this.validators.every((validator) => validator.validate(password, tracker))
+  }
+
+  validateWithErrors(password: string): ValidationError[] {
+    const tracker = new ErrorTracker()
+
+    this.validate(password, tracker)
+
+    return tracker.pullErrors()
   }
 }

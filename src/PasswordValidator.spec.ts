@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { PasswordValidator } from "./PasswordValidator.js"
+import { LengthValidationError } from "./errors/LengthValidationError.js"
+import { CapitalLetterError } from "./errors/CapitalLetterError.js"
 
 describe("validatePassword", () => {
   const passwordValidator = PasswordValidator.createValidation1()
@@ -7,26 +9,26 @@ describe("validatePassword", () => {
   it("returns true if the password meets all the requirements", () => {
     const password = "Aa1_xxxxx"
 
-    const result = passwordValidator.validate(password)
+    const result = passwordValidator.validateWithErrors(password)
 
-    expect(result).toBe(true)
+    expect(result).toEqual([])
   })
 
   describe("password is rejected", () => {
     it("if has less than 8 characters", () => {
       const password = "Aa1_xxxx"
 
-      const result = passwordValidator.validate(password)
+      const result = passwordValidator.validateWithErrors(password)
 
-      expect(result).toBe(false)
+      expect(result[0]).toBeInstanceOf(LengthValidationError)
     })
 
     it("if not has a capital letter", () => {
       const password = "aa1_xxxxx"
 
-      const result = passwordValidator.validate(password)
+      const result = passwordValidator.validateWithErrors(password)
 
-      expect(result).toBe(false)
+      expect(result[0]).toBeInstanceOf(CapitalLetterError)
     })
 
     it("if not has a lowercase letter", () => {
