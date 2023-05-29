@@ -36,5 +36,13 @@ describe("validatePassword", () => {
 
       expect(result).toBe(false)
     })
+
+    it("if not has a number", () => {
+      const password = "Aaa_xxxxx"
+
+      const result: boolean = passwordValidator.validate(password)
+
+      expect(result).toBe(false)
+    })
   })
 })

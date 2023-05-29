@@ -12,6 +12,10 @@ export class PasswordValidator {
       return false
     }
 
+    if (this.doesNotHaveNumber(password)) {
+      return false
+    }
+
     return true
   }
 
@@ -25,5 +29,9 @@ export class PasswordValidator {
 
   private doesNotHaveCapitalLetter(password: string) {
     return password.toLowerCase() === password
+  }
+
+  private doesNotHaveNumber(password: string) {
+    return password.match(/\d/) === null
   }
 }
