@@ -13,58 +13,58 @@ describe("validatePassword", () => {
   it("returns true if the password meets all the requirements", () => {
     const password = "Aa1_xxxxx"
 
-    const result = passwordValidator.validate(password)
+    const { errors } = passwordValidator.validate(password)
 
-    expect(result).toEqual([])
+    expect(errors).toEqual([])
   })
 
   describe("password is rejected", () => {
     it("if has less than 8 characters", () => {
       const password = "Aa1_xxxx"
 
-      const result = passwordValidator.validate(password)
+      const { errors } = passwordValidator.validate(password)
 
-      expect(result[0]).toBeInstanceOf(LengthValidationError)
+      expect(errors[0]).toBeInstanceOf(LengthValidationError)
     })
 
     it("if not has a capital letter", () => {
       const password = "aa1_xxxxx"
 
-      const result = passwordValidator.validate(password)
+      const { errors } = passwordValidator.validate(password)
 
-      expect(result[0]).toBeInstanceOf(CapitalLetterError)
+      expect(errors[0]).toBeInstanceOf(CapitalLetterError)
     })
 
     it("if not has a lowercase letter", () => {
       const password = "AA1_XXXXX"
 
-      const result = passwordValidator.validate(password)
+      const { errors } = passwordValidator.validate(password)
 
-      expect(result[0]).toBeInstanceOf(LowercaseLetterError)
+      expect(errors[0]).toBeInstanceOf(LowercaseLetterError)
     })
 
     it("if not has a number", () => {
       const password = "Aaa_xxxxx"
 
-      const result = passwordValidator.validate(password)
+      const { errors } = passwordValidator.validate(password)
 
-      expect(result[0]).toBeInstanceOf(NumberError)
+      expect(errors[0]).toBeInstanceOf(NumberError)
     })
 
     it("if not has a underscore", () => {
       const password = "Aa1xxxxxx"
 
-      const result = passwordValidator.validate(password)
+      const { errors } = passwordValidator.validate(password)
 
-      expect(result[0]).toBeInstanceOf(UnderscoreError)
+      expect(errors[0]).toBeInstanceOf(UnderscoreError)
     })
 
     it("returns multiple validation errors", () => {
       const password = ""
 
-      const result = passwordValidator.validate(password)
+      const { errors } = passwordValidator.validate(password)
 
-      expect(result).toEqual([
+      expect(errors).toEqual([
         new LengthValidationError(8),
         new CapitalLetterError(),
         new LowercaseLetterError(),
@@ -84,7 +84,7 @@ describe("validatePassword", () => {
     ])(`password "%s" is %s`, (password, expected) => {
       const passwordValidator = PasswordValidator.createValidation2()
 
-      const result = hasErrors(passwordValidator.validate(password))
+      const result = hasErrors(passwordValidator.validate(password).errors)
 
       expect(result).toBe(expected)
     })
@@ -100,10 +100,26 @@ describe("validatePassword", () => {
     ])(`password "%s" is %s`, (password, expected) => {
       const passwordValidator = PasswordValidator.createValidation3()
 
-      const result = hasErrors(passwordValidator.validate(password))
+      const result = hasErrors(passwordValidator.validate(password).errors)
 
       expect(result).toBe(expected)
     })
+  })
+
+  it("passes validation with just one error", () => {
+    const passwordWithOneError = "aa1_xxxxx"
+
+    const result = passwordValidator.validate(passwordWithOneError)
+
+    expect(result.isValid).toBe(true)
+  })
+
+  it("fails with more than one error", () => {
+    const passwordWithOneError = "aaa_xxxxx"
+
+    const result = passwordValidator.validate(passwordWithOneError)
+
+    expect(result.isValid).toBe(false)
   })
 })
 

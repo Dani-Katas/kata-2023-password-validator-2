@@ -6,6 +6,7 @@ import { NumberValidator } from "./validators/NumberValidator.js"
 import { UnderscoreValidator } from "./validators/UnderscoreValidator.js"
 import { ValidationError } from "./ValidationError.js"
 import { ErrorTracker } from "./ErrorTracker.js"
+import { PasswordValidationResult } from "./PasswordValidationResult.js"
 
 export class PasswordValidator {
   static createValidation1(): PasswordValidator {
@@ -38,11 +39,13 @@ export class PasswordValidator {
 
   constructor(private validators: Validator[] = []) {}
 
-  validate(password: string): ValidationError[] {
+  validate(password: string): PasswordValidationResult {
     const tracker = new ErrorTracker()
 
     this.validators.forEach((validator) => validator.validate(password, tracker))
 
-    return tracker.pullErrors()
+    const validationErrors = tracker.pullErrors()
+
+    return new PasswordValidationResult(validationErrors.length <= 1, validationErrors)
   }
 }
