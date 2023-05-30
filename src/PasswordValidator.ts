@@ -4,7 +4,6 @@ import { CapitalLetterValidator } from "./validators/CapitalLetterValidator.js"
 import { LowercaseLetterValidator } from "./validators/LowercaseLetterValidator.js"
 import { NumberValidator } from "./validators/NumberValidator.js"
 import { UnderscoreValidator } from "./validators/UnderscoreValidator.js"
-import { ValidationError } from "./ValidationError.js"
 import { ErrorTracker } from "./ErrorTracker.js"
 import { PasswordValidationResult } from "./PasswordValidationResult.js"
 
@@ -37,6 +36,8 @@ export class PasswordValidator {
     ])
   }
 
+  private errorLimit = 1
+
   constructor(private validators: Validator[] = []) {}
 
   validate(password: string): PasswordValidationResult {
@@ -46,6 +47,6 @@ export class PasswordValidator {
 
     const validationErrors = tracker.pullErrors()
 
-    return new PasswordValidationResult(validationErrors.length <= 1, validationErrors)
+    return new PasswordValidationResult(validationErrors.length <= this.errorLimit, validationErrors)
   }
 }
