@@ -38,16 +38,10 @@ export class PasswordValidator {
 
   constructor(private validators: Validator[] = []) {}
 
-  validate(password: string): boolean {
-    let validationErrors = this.validateWithErrors(password)
-
-    return validationErrors.length === 0
-  }
-
-  validateWithErrors(password: string): ValidationError[] {
+  validate(password: string): ValidationError[] {
     const tracker = new ErrorTracker()
 
-    this.validators.every((validator) => validator.validate(password, tracker))
+    this.validators.forEach((validator) => validator.validate(password, tracker))
 
     return tracker.pullErrors()
   }

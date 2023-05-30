@@ -5,6 +5,7 @@ import { CapitalLetterError } from "./errors/CapitalLetterError.js"
 import { LowercaseLetterError } from "./errors/LowercaseLetterError.js"
 import { NumberError } from "./errors/NumberError.js"
 import { UnderscoreError } from "./errors/UnderscoreError.js"
+import { ValidationError } from "./ValidationError.js"
 
 describe("validatePassword", () => {
   const passwordValidator = PasswordValidator.createValidation1()
@@ -12,7 +13,7 @@ describe("validatePassword", () => {
   it("returns true if the password meets all the requirements", () => {
     const password = "Aa1_xxxxx"
 
-    const result = passwordValidator.validateWithErrors(password)
+    const result = passwordValidator.validate(password)
 
     expect(result).toEqual([])
   })
@@ -21,7 +22,7 @@ describe("validatePassword", () => {
     it("if has less than 8 characters", () => {
       const password = "Aa1_xxxx"
 
-      const result = passwordValidator.validateWithErrors(password)
+      const result = passwordValidator.validate(password)
 
       expect(result[0]).toBeInstanceOf(LengthValidationError)
     })
@@ -29,7 +30,7 @@ describe("validatePassword", () => {
     it("if not has a capital letter", () => {
       const password = "aa1_xxxxx"
 
-      const result = passwordValidator.validateWithErrors(password)
+      const result = passwordValidator.validate(password)
 
       expect(result[0]).toBeInstanceOf(CapitalLetterError)
     })
@@ -37,7 +38,7 @@ describe("validatePassword", () => {
     it("if not has a lowercase letter", () => {
       const password = "AA1_XXXXX"
 
-      const result = passwordValidator.validateWithErrors(password)
+      const result = passwordValidator.validate(password)
 
       expect(result[0]).toBeInstanceOf(LowercaseLetterError)
     })
@@ -45,7 +46,7 @@ describe("validatePassword", () => {
     it("if not has a number", () => {
       const password = "Aaa_xxxxx"
 
-      const result = passwordValidator.validateWithErrors(password)
+      const result = passwordValidator.validate(password)
 
       expect(result[0]).toBeInstanceOf(NumberError)
     })
@@ -53,7 +54,7 @@ describe("validatePassword", () => {
     it("if not has a underscore", () => {
       const password = "Aa1xxxxxx"
 
-      const result = passwordValidator.validateWithErrors(password)
+      const result = passwordValidator.validate(password)
 
       expect(result[0]).toBeInstanceOf(UnderscoreError)
     })
@@ -69,7 +70,7 @@ describe("validatePassword", () => {
     ])(`password "%s" is %s`, (password, expected) => {
       const passwordValidator = PasswordValidator.createValidation2()
 
-      const result = passwordValidator.validate(password)
+      const result = hasErrors(passwordValidator.validate(password))
 
       expect(result).toBe(expected)
     })
@@ -85,9 +86,13 @@ describe("validatePassword", () => {
     ])(`password "%s" is %s`, (password, expected) => {
       const passwordValidator = PasswordValidator.createValidation3()
 
-      const result = passwordValidator.validate(password)
+      const result = hasErrors(passwordValidator.validate(password))
 
       expect(result).toBe(expected)
     })
   })
 })
+
+export function hasErrors(validationErrors: ValidationError[]) {
+  return validationErrors.length === 0
+}

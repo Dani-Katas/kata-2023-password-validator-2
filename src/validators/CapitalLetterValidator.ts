@@ -3,13 +3,11 @@ import { ErrorTracker } from "../ErrorTracker.js"
 import { CapitalLetterError } from "../errors/CapitalLetterError.js"
 
 export class CapitalLetterValidator implements Validator {
-  validate(password: string, tracker: ErrorTracker): boolean {
+  validate(password: string, tracker: ErrorTracker): void {
     let isValid = password.toLowerCase() !== password
 
-    if (!isValid && tracker) {
+    if (!isValid) {
       tracker.addError(new CapitalLetterError())
     }
-
-    return isValid
   }
 }
