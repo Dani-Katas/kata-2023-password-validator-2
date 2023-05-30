@@ -5,7 +5,7 @@ import { CapitalLetterError } from "./errors/CapitalLetterError.js"
 import { LowercaseLetterError } from "./errors/LowercaseLetterError.js"
 import { NumberError } from "./errors/NumberError.js"
 import { UnderscoreError } from "./errors/UnderscoreError.js"
-import { ValidationError } from "./ValidationError.js"
+import { PasswordValidationResult } from "./PasswordValidationResult.js"
 
 describe("validatePassword", () => {
   const passwordValidator = PasswordValidator.createValidation1()
@@ -76,33 +76,33 @@ describe("validatePassword", () => {
 
   describe("validation 2", () => {
     it.each([
-      ["Aa1_xxx", true],
-      ["Aa1_xx", false],
-      ["aa1_xxx", false],
-      ["AA1_XXX", false],
-      ["Aaa_xxx", false],
+      ["Aa1_xxx", null],
+      ["Aa1_xx", LengthValidationError],
+      ["aa1_xxx", CapitalLetterError],
+      ["AA1_XXX", LowercaseLetterError],
+      ["Aaa_xxx", NumberError],
     ])(`password "%s" is %s`, (password, expected) => {
       const passwordValidator = PasswordValidator.createValidation2()
 
-      const result = hasErrors(passwordValidator.validate(password).errors)
+      const result = passwordValidator.validate(password)
 
-      expect(result).toBe(expected)
+      expectResultHasError(result, expected)
     })
   })
 
   describe("validation 3", () => {
     it.each([
-      ["Aa1_xxxxxxxxxxxxx", true],
-      ["Aa1_xxxxxxxxxxxx", false],
-      ["aa1_xxxxxxxxxxxxx", false],
-      ["AA1_XXXXXXXXXXXXX", false],
-      ["Aaa_xxxxxxxxxxxxx", false],
+      ["Aa1_xxxxxxxxxxxxx", null],
+      ["Aa1_xxxxxxxxxxxx", LengthValidationError],
+      ["aa1_xxxxxxxxxxxxx", CapitalLetterError],
+      ["AA1_XXXXXXXXXXXXX", LowercaseLetterError],
+      ["Aaa_xxxxxxxxxxxxx", NumberError],
     ])(`password "%s" is %s`, (password, expected) => {
       const passwordValidator = PasswordValidator.createValidation3()
 
-      const result = hasErrors(passwordValidator.validate(password).errors)
+      const result = passwordValidator.validate(password)
 
-      expect(result).toBe(expected)
+      expectResultHasError(result, expected)
     })
   })
 
@@ -122,7 +122,12 @@ describe("validatePassword", () => {
     expect(result.isValid).toBe(false)
   })
 })
+function expectResultHasError(result: PasswordValidationResult, expected: any) {
+  let error = result.errors[0]
 
-export function hasErrors(validationErrors: ValidationError[]) {
-  return validationErrors.length === 0
+  if (!error && !expected) {
+    return
+  }
+
+  expect(error).toBeInstanceOf(expected)
 }
