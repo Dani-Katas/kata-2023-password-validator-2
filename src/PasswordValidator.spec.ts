@@ -58,6 +58,20 @@ describe("validatePassword", () => {
 
       expect(result[0]).toBeInstanceOf(UnderscoreError)
     })
+
+    it("returns multiple validation errors", () => {
+      const password = ""
+
+      const result = passwordValidator.validate(password)
+
+      expect(result).toEqual([
+        new LengthValidationError(8),
+        new CapitalLetterError(),
+        new LowercaseLetterError(),
+        new NumberError(),
+        new UnderscoreError(),
+      ])
+    })
   })
 
   describe("validation 2", () => {
