@@ -8,7 +8,7 @@ import { ErrorTracker } from "./ErrorTracker.js"
 import { PasswordValidationResult } from "./PasswordValidationResult.js"
 
 export class PasswordValidator {
-  static createValidation1(): PasswordValidator {
+  static createValidation1() {
     return new PasswordValidator([
       new LengthValidator(8),
       new CapitalLetterValidator(),
