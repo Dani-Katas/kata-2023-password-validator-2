@@ -22,7 +22,7 @@
   "devDependencies": {
     "@types/node": "20.2.5",
     "@vitest/coverage-c8": "^0.31.1",
-    "prettier": "2.8.8",
+    "prettier": "3.2.5",
     "rimraf": "5.0.1",
     "typescript": "5.0.4",
     "vitest": "0.31.1"
